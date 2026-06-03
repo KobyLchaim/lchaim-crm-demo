@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Chaim CRM — Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: oklch(96% 0.012 80);
+    --surface: #ffffff;
+    --surface-alt: oklch(94.5% 0.015 80);
+    --border: oklch(88% 0.02 80);
+    --border-strong: oklch(76% 0.025 80);
+    --ink: oklch(18% 0.025 60);
+    --text: oklch(22% 0.018 65);
+    --text-muted: oklch(46% 0.014 65);
+    --text-subtle: oklch(62% 0.012 65);
+    --accent: oklch(58% 0.105 85);
+    --accent-hov: oklch(50% 0.115 85);
+    --accent-soft: oklch(94% 0.035 85);
+    --accent-text: oklch(42% 0.11 85);
+    --crew: oklch(57% 0.13 142);
+    --cool: oklch(55% 0.165 232);
+    --shadow-sm: 0 1px 2px rgba(48,36,16,.05), 0 1px 1px rgba(48,36,16,.04);
+    --shadow-md: 0 6px 16px -3px rgba(48,36,16,.10), 0 2px 6px -1px rgba(48,36,16,.06);
+    --shadow-pop: 0 18px 40px -12px rgba(48,36,16,.22), 0 6px 12px -3px rgba(48,36,16,.09);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    font-family: "Inter", system-ui, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(ellipse 1100px 700px at 50% -10%, var(--accent-soft), transparent 60%),
+      var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+  }
+  .wrap { width: 100%; max-width: 880px; }
+  .mark {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 28px;
+  }
+  .mark span { font-family: "Source Serif 4", Georgia, serif; font-weight: 700; font-size: 30px; color: var(--accent); letter-spacing: -0.01em; }
+  .kicker {
+    font-family: "JetBrains Mono", monospace; font-size: 11.5px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-text);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.04; letter-spacing: -0.03em;
+    color: var(--ink); font-weight: 700; margin: 0 0 14px;
+    text-wrap: balance;
+  }
+  .lede {
+    font-size: 15.5px; line-height: 1.6; color: var(--text-muted); margin: 0 0 36px;
+    max-width: 560px;
+  }
+  .lede .serif { font-family: "Source Serif 4", serif; font-style: italic; color: var(--text); }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } }
+  a.card {
+    display: flex; flex-direction: column; gap: 0;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 26px 26px 22px; text-decoration: none; color: inherit;
+    box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+    transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  }
+  a.card::before {
+    content: ""; position: absolute; inset: 0 auto 0 0; width: 3px;
+    background: var(--card-c, var(--accent)); opacity: 0; transition: opacity .16s ease;
+  }
+  a.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-pop); border-color: var(--card-c, var(--accent)); }
+  a.card:hover::before { opacity: 1; }
+  .card-ico {
+    width: 44px; height: 44px; border-radius: 11px; margin-bottom: 18px;
+    display: flex; align-items: center; justify-content: center;
+    background: color-mix(in oklch, var(--card-c, var(--accent)) 14%, var(--surface));
+    color: var(--card-c, var(--accent));
+  }
+  .card-ico svg { width: 23px; height: 23px; }
+  .card-eyebrow { font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 6px; }
+  .card-title { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 8px; }
+  .card-desc { font-size: 13px; line-height: 1.55; color: var(--text-muted); margin-bottom: 20px; flex: 1; }
+  .card-cta {
+    display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
+    font-size: 13px; font-weight: 600; color: var(--card-c, var(--accent-text));
+  }
+  .card-cta svg { width: 15px; height: 15px; transition: transform .16s ease; }
+  a.card:hover .card-cta svg { transform: translateX(3px); }
+  .note {
+    margin-top: 32px; display: flex; align-items: flex-start; gap: 12px;
+    background: var(--accent-soft); border: 1px solid color-mix(in oklch, var(--accent) 22%, transparent);
+    border-radius: 12px; padding: 14px 16px; max-width: 620px;
+  }
+  .note svg { width: 18px; height: 18px; color: var(--accent-text); flex-shrink: 0; margin-top: 1px; }
+  .note p { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--accent-ink, oklch(32% 0.095 85)); }
+  .note strong { font-weight: 700; }
+  .fullscreen-banner {
+    margin-top: 18px; display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px 18px; text-decoration: none; color: inherit;
+    box-shadow: var(--shadow-sm); transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  }
+  .fullscreen-banner:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--crew); }
+  .fb-ico { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: color-mix(in oklch, var(--crew) 14%, var(--surface)); color: var(--crew); }
+  .fb-ico svg { width: 21px; height: 21px; }
+  .fb-t { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .fb-d { font-size: 12.5px; line-height: 1.5; color: var(--text-muted); }
+  footer {
+    margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--border);
+    font-size: 11.5px; color: var(--text-subtle); line-height: 1.6;
+  }
+  footer .mono { font-family: "JetBrains Mono", monospace; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="mark"><span>L'C</span></div>
+    <div class="kicker">L'Chaim Construction &amp; Design</div>
+    <h1>The L'Chaim CRM — demo build</h1>
+    <p class="lede">One place for every job, dollar and decision. <span class="serif">Pick a surface to try</span> — the full desktop workspace, or the field companion for the phone. Everything's loaded with sample jobs so you can click around freely.</p>
+
+    <div class="cards">
+      <a class="card" href="Lchaim-CRM-Desktop.html" style="--card-c: var(--cool)">
+        <div class="card-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="card-eyebrow">Office · full workspace</div>
+        <div class="card-title">Desktop CRM</div>
+        <div class="card-desc">The complete back-office: today's command view, projects, pipeline, calendar, open items, decisions, subs, documents, finance, photos and the knowledge "Brain." Best on a laptop or large screen.</div>
+        <span class="card-cta">Open desktop demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+
+      <a class="card" href="Lchaim-CRM-Mobile.html" style="--card-c: var(--crew)">
+        <div class="card-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
+        </div>
+        <div class="card-eyebrow">Field · on the jobsite</div>
+        <div class="card-title">Mobile companion</div>
+        <div class="card-desc">The crew's pocket app: today's schedule, project drill-ins, the deal pipeline, a tagged inbox, photo capture and field check-requests. Opens in a phone frame — try it on your phone too.</div>
+        <span class="card-cta">Open mobile demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+
+    <a class="fullscreen-banner" href="Lchaim-CRM-iPhone.html">
+      <div class="fb-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
+      </div>
+      <div class="fb-text">
+        <div class="fb-t">Testing on a real iPhone? Open the full-screen build →</div>
+        <div class="fb-d">Same mobile app with the preview bezel removed — fills the whole phone. Tap to open in Safari, or use Share → Add to Home Screen to launch it like a native app.</div>
+      </div>
+    </a>
+
+    <div class="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <p><strong>It's a demo — any password works.</strong> Type any email and password to sign in. Sample data resets on reload (the mobile app remembers your sign-in if you tick "keep me signed in"). Photos link out to CompanyCam placeholders. Nothing you do is saved or sent anywhere.</p>
+    </div>
+
+    <footer>
+      <span class="mono">L'Chaim Construction &amp; Design</span> · 76 Washington Avenue, Suffern NY 10901 · <span class="mono">(845) 422-0060</span><br>
+      Demo build for review &amp; testing — not connected to live data.
+    </footer>
+  </div>
+</body>
+</html>
